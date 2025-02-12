@@ -5,38 +5,40 @@ import com.lalya.SpringJobApp.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class JobController {
-
     @Autowired
-    JobService jobService;
-    @RequestMapping({"/", "home"})
-    public String home() {
-        return "home";
+    private JobService jobService;
+
+    @GetMapping("jobPosts")
+    public List<JobPost> getAllJobs() {
+        return jobService.getAllJobs();
     }
 
-    @RequestMapping("addjob")
-    public String addJob() {
-        return "addjob";
+    @GetMapping("jobPost/{postId}")
+    public JobPost getJob(@PathVariable("postId") int postId) {
+        return jobService.getJob(postId);
     }
 
-    @PostMapping("handleForm")
-    public String handleForm(JobPost jobPost) {
+    @PostMapping("jobPost")
+    public String addJob(@RequestBody JobPost jobPost) {
         jobService.addJob(jobPost);
-        return "success";
+        return "added job: " + jobPost.getPostId();
     }
 
-    @GetMapping("viewalljobs")
-    public String viewAllJobs(Model model) {
-        List<JobPost> jobPosts = jobService.getAllJobs();
-        jobPosts.forEach(System.out::println);
-        model.addAttribute("jobPosts", jobPosts);
-        return "viewalljobs";
+    @PutMapping("jobPost")
+    public String updateJob(@RequestBody JobPost jobPost) {
+        jobService.updateJob(jobPost);
+        return "updated job: " + jobPost.getPostId();
+    }
+
+    @DeleteMapping("jobPost/{postId}")
+    public String deleteJob(@PathVariable("postId") int jobId) {
+        jobService.deleteJob(jobId);
+        return "Deleted job: " + jobId;
     }
 }
