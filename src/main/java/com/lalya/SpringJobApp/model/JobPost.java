@@ -1,13 +1,20 @@
 package com.lalya.SpringJobApp.model;
 
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Entity
 public class JobPost {
+    @Id
     private int postId;
+    private String postDesc;
+    private int reqExperience;
+    private String postProfile;
+    private List<String> postTechStack;
 
     @Override
     public String toString() {
@@ -20,8 +27,6 @@ public class JobPost {
                 '}';
     }
 
-    private String postDesc;
-
     public JobPost() {
     }
 
@@ -32,10 +37,6 @@ public class JobPost {
         this.postProfile = postProfile;
         this.postTechStack = postTechStack;
     }
-
-    private int reqExperience;
-    private String postProfile;
-    private List<String> postTechStack;
 
     public int getPostId() {
         return postId;
